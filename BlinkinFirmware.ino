@@ -232,10 +232,13 @@ void loop() {
     patternSpeed = map(analogRead(COLOR2_PIN), 0, 1024, 0, 30);
     //startIndex = startIndex + patternSpeed; /* motion speed */
 
-    if ((noSignal == true))
+    if ((noSignal == true)) {
       setStatusNoSignal();
-    else
+    } else if(commandSeq == true) {
+      setStatusCommand();
+    } else {
       setStatusMode();
+    }
 
     //Pot 3 - user set strip brightness
     if ( inSetup == false ) {
@@ -248,34 +251,49 @@ void loop() {
 
 void ledUpdate()
 {
-
   bool patternStable = true;
+  byte firstPatternHistory = patternHistory[0];
 
   //check that the pattern value has been stable. Pattern value is the pattern requested by the user via PWM pulse width measurement.
   for (int i = 0 ; i < patternHistory.capacity ; i++) {
-    if (patternHistory[0] != patternHistory[i]){
+    if (firstPatternHistory != patternHistory[i]){
       patternStable = false; //if any of the elements of the patternHistory buffer don't match, the pattern is not stable
       //setStatusError();
     }
   }
 
-  if ((cmdDisableOutput == false) && (inSetup == false))
-  {
-    if (patternStable) //if the pattern is stable, output and update the current pattern value
-    {
-      currentPattern = patternHistory[0];
-      gPatterns[currentPattern]();
-    }
-    else //if pattern is not stable, use the previous stable pattern
-    {
-      gPatterns[currentPattern]();
-    }
-  }
-  else
-  {
-    //gPatterns[testPatternDisplay]();
-    if (cmdDisableOutput == false){
+  if(inSetup) {
+    commandSeq = false;
+    if(!cmdDisableOutput) {
       gPatterns[noSignalPatternDisplay]();
+    } 
+
+  } else {
+    if(patternStable) {
+      if(commandSeq) {
+        if(firstPatternHistory >= 0 && firstPatternHistory <= 99) {
+          gCommands[currCommand](firstPatternHistory);
+          
+          commandSeq = false;
+          setStatusRun();
+        } else if(firstPatternHistory >= 100 && firstPatternHistory <= 109 && !cmdDisableOutput) {
+          gPatterns[currentPattern]();
+        }
+      } else if(firstPatternHistory >= 0 && firstPatternHistory <= 99 && !cmdDisableOutput) {
+        currentPattern = firstPatternHistory;
+        gPatterns[currentPattern]();
+      }
+
+      if(patternStable && firstPatternHistory >= 100 && firstPatternHistory <= 109) {
+        commandSeq = true;   
+        currCommand = firstPatternHistory - 100;
+        
+        // Indicate Command mode signal detected    
+        setStatusCommand();
+      }
+
+    } else if(!cmdDisableOutput) {
+      gPatterns[currentPattern]();
     }
   }
 
@@ -348,5 +366,3 @@ void setStripSelect(bool newStripState)
   if (newStripState != addressableStrip)
     toggleStripSelect();
 }
-
-

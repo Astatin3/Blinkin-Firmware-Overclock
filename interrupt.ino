@@ -51,28 +51,12 @@ void ISRfalling()
   uint16_t pwm_value = TCNT1 - prev_time;
 
   //TCNT1*0.0000005 = pulse width (seconds)
-  if ((pwm_value <= 4000) && (pwm_value >= 1990)) {
-    if (commandSeq == false) {
-      patternHistory.unshift((byte)constrain(map(pwm_value, 2000, 4000, 0, 100),0,99) ); //4000 is 2000ms and 1000 is 1000ms
-    }
-    else {
-      gCommands[currCommand](map(pwm_value, 2000, 4000, 0, 99));
-      
-      commandSeq = false;
-      setStatusRun();
-    }
+  if (pwm_value <= 4000 && pwm_value >= 2000) {
+    patternHistory.unshift((byte)constrain(map(pwm_value, 2000, 4000, 0, 100),0,99)); //4000 is 2000ms and 1000 is 1000ms
+  } else if(pwm_value >= 4200 && pwm_value <= 4400) {
+    patternHistory.unshift((byte)(constrain(map(pwm_value, 4200, 4400, 0, 10), 0, 9) + 100));
   }
-  else if ((pwm_value >= 4200) && (pwm_value <= 4400)) {
-    if ((inSetup == false)) {
 
-        commandSeq = true;   
-          
-        // Indicate Command mode signal detected    
-        setStatusCommand();
-        
-        currCommand = constrain(map(pwm_value, 4200, 4401, 0, 10), 0, 9);
-    }
-  }
 
   prev_time = 0;
   inPulse = false;
