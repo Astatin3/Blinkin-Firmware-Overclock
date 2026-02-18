@@ -5,7 +5,7 @@
 #include <EEPROM.h>
 
 #define CIRCULAR_BUFFER_XS
-#include <CircularBuffer.h>
+#include <CircularBuffer.hpp>
 
 FASTLED_USING_NAMESPACE
 
