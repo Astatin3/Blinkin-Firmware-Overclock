@@ -33,7 +33,7 @@ void readUserInputs()
 {
   //read Pot value and translate to colors/strip length
 
-  uint8_t newLength = constrain(map(analogRead(LENGTH_PIN), 0, 1024, 1, 241), 0, 240);
+  uint8_t newLength = constrain(map(analogRead(LENGTH_PIN), 0, 1024, 1, 241), 0, 320);
 
   if ((stripLength > newLength) && (addressableStrip == true)){
     //need loop to only update pixels to black that are > then new length
