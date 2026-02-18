@@ -33,7 +33,7 @@ FASTLED_USING_NAMESPACE
 
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
-#define NUM_LEDS 240
+#define NUM_LEDS 320
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
 
