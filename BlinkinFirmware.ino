@@ -3,6 +3,8 @@
 void setup() {
   delay(1000); // 1 second delay for start-up
 
+  // Serial.begin(115200);
+
   // Setup a default palette and blend style
   currentPalette = RainbowColors_p;
   currentBlending = LINEARBLEND; //or NOBLEND;

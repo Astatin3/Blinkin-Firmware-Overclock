@@ -33,7 +33,8 @@ void readUserInputs()
 {
   //read Pot value and translate to colors/strip length
 
-  uint8_t newLength = constrain(map(analogRead(LENGTH_PIN), 0, 1024, 1, 321), 0, 320);
+  //uint8_t newLength = constrain(map(analogRead(LENGTH_PIN), 0, 1024, 1, 321), 0, 320);
+  uint16_t newLength = 320;
 
   if ((stripLength > newLength) && (addressableStrip == true)){
     //need loop to only update pixels to black that are > then new length
@@ -217,7 +218,7 @@ void initEEPROM()
       addressableStrip = EEPROM.read(SS_EE);
       COLOR1 = EEPROM.read(COLOR1_EE);
       COLOR2 = EEPROM.read(COLOR2_EE);
-      stripLength = EEPROM.read(LED_EE);
+      stripLength = 320;
       noSignalPatternDisplay = EEPROM.read(PATTERN_EE);
     }
   }

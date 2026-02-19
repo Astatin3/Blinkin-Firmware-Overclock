@@ -87,7 +87,7 @@ uint8_t patternSpeed = 5;
 uint8_t patternAdj = 3;
 
 uint8_t brightness = 200;
-uint8_t stripLength = 60;
+uint16_t stripLength = 60;
 
 uint8_t pos = 0;
 uint8_t prevpos =0;

@@ -486,7 +486,7 @@ void colorwaves(CRGBPalette16 palette )
       bri8 += (255 - brightdepth);
       
       uint8_t index = hue8;
-      index = scale8( index, 240);
+      index = scale8( index, 320);
   
       CRGB newcolor = ColorFromPalette( palette, index, bri8);
   
